@@ -1,0 +1,125 @@
+User Authentication and Authorization APIs
+## User Registration
+
+Method: POST
+Endpoint: /api/users/register
+Purpose: Register a user with email, password, role_id, and optional state_id/region_id.
+
+## Login
+
+Method: POST
+Endpoint: /api/users/login
+Purpose: Authenticate a user and return a JWT token.
+State Management APIs (Super Admin - role_id: 1)
+
+## Add State
+
+Method: POST
+Endpoint: /api/states/add
+Headers:
+Authorization: Bearer <token>
+Body: { "name": "State Name" }
+Purpose: Add a new state.
+
+## View States
+
+Method: GET
+Endpoint: /api/states/view
+Headers:
+Authorization: Bearer <token>
+Purpose: Get the list of all states.
+
+## Edit State
+
+Method: PUT
+Endpoint: /api/states/edit?state_id=<state_id>
+Headers:
+Authorization: Bearer <token>
+Body: { "state_name": "Updated State Name" }
+Purpose: Update state details.
+
+## Remove State
+
+Method: DELETE
+Endpoint: /api/states/remove
+Headers:
+Authorization: Bearer <token>
+Body: { "state_id": <state_id> }
+Purpose: Remove a state.
+Region Management APIs (Super Admin - role_id: 1)
+
+## Add Region
+
+Method: POST
+Endpoint: /api/regions/add
+Headers:
+Authorization: Bearer <token>
+Body: { "state_id": <state_id>, "region_name": "Region Name" }
+Purpose: Add a region under a specific state.
+
+## View Regions
+
+Method: GET
+Endpoint: /api/regions/view?state_id=<state_id>
+Headers:
+Authorization: Bearer <token>
+Purpose: View regions under a specific state (if state_id is provided) or all regions.
+
+## Edit Region
+
+Method: PUT
+Endpoint: /api/regions/edit?region_id=<region_id>
+Headers:
+Authorization: Bearer <token>
+Body: { "region_name": "Updated Region Name" }
+Purpose: Update a region's details.
+
+## Delete Region
+
+Method: DELETE
+Endpoint: /api/regions/delete?region_id=<region_id>
+Headers:
+Authorization: Bearer <token>
+Purpose: Delete a region.
+Center Management APIs (Admin/Users with region_id access)
+
+## Add Center
+
+Method: POST
+Endpoint: /api/centers/add
+Headers:
+Authorization: Bearer <token>
+Body: { "region_id": <region_id>, "u_id": <user_id>, "name": "Center Name", "contact_no": "Contact Number", "email": "Email Address" }
+Purpose: Add a center in a specific region.
+
+## View User Centers
+
+Method: GET
+Endpoint: /api/centers/view?region_id=<region_id>
+Headers:
+Authorization: Bearer <token>
+Purpose: View centers in a specific region (or all if region_id is not provided).
+
+## Edit Center
+
+Method: PUT
+Endpoint: /api/centers/edit/:id
+Headers:
+Authorization: Bearer <token>
+Body: { "name": "Updated Name", "contact_no": "Updated Contact Number", "email": "Updated Email" }
+Purpose: Update center details by ID.
+
+## Delete Center
+
+Method: DELETE
+Endpoint: /api/centers/delete/:id
+Headers:
+Authorization: Bearer <token>
+Purpose: Delete a center by ID.
+
+
+Frontend Integration Recommendations
+User Login: After login, store the JWT token in secure storage (cookies).
+Role-Based Navigation:
+Render pages and functionalities based on role_id decoded from the JWT token.
+Example: Super Admins (role_id: 1) should see state and region management, while users with region_id access should manage centers.
